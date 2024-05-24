@@ -1,40 +1,43 @@
 using NaughtyAttributes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+public abstract class Gun : MonoBehaviour
 {
     [Header("User Settings")]
-    [SerializeField] private float aimRadius = 2f;
-    [SerializeField][Dropdown("aimingModes")] private string aimingMode;
-    [SerializeField][Dropdown("shootModes")] private string shootMode;
+    [SerializeField] protected float aimRadius = 2f;
+    [SerializeField][Dropdown("aimingModes")] protected string aimingMode;
     [Space]
-    [SerializeField] private float shootCooldown = 1f;
-    [SerializeField] private float bulletDamage;
-    [SerializeField] private float bulletSpeed;
+    [SerializeField] protected float shootCooldown = 1f;
+    [SerializeField] protected float bulletDamage;
+    [SerializeField] protected float bulletSpeed;
     [Space]
-    [SerializeField] private float rotationSpeed = 5f;
-    [SerializeField] private float shootingFOV = 20f;
+    [SerializeField] protected float rotationSpeed = 5f;
+    [SerializeField] protected float shootingFOV = 20f;
 
     [Header("Dev Settings")]
-    [SerializeField] private bool aim;
-    [SerializeField] private Transform target;
-    [SerializeField] private Transform body;
+    [SerializeField] protected bool aim;
+    [SerializeField] protected Transform target;
+    [SerializeField] protected Transform body;
     [Space]
-    [SerializeField] private Transform bulletPool;
-    [SerializeField] private Transform activeBulletPool;
+    [SerializeField] protected Transform physicalBulletPool;
+    [SerializeField] protected Transform hitscanBulletPool;
+    [SerializeField] protected Transform activeBulletPool;
+    public GunData gunData;
 
-    private Timer timer_Shoot;
-    private List<Transform> possibleTargets = new();
-    private CircleCollider2D circleCollider;
+    protected Timer timer_Shoot;
+    protected List<Transform> possibleTargets = new();
+    protected CircleCollider2D circleCollider;
 
-    private Transform gunPoint;
-    private SpriteRenderer gunSprite;
+    protected Transform gunPoint;
+    protected SpriteRenderer gunSprite;
+    protected Animator animator;
+    protected Transform rotateAnchor;
 
     private List<string> aimingModes = new List<string>() { "Closest", "First in group", "Last in group", "None" };
-    private List<string> shootModes = new List<string>() { "Physical Bullets", "Hitscan Shots", "None" };
 
     private void Awake()
     {
@@ -42,12 +45,21 @@ public class Gun : MonoBehaviour
         circleCollider = GetComponent<CircleCollider2D>();
         gunPoint = body.transform.GetChild(0);
         gunSprite = body.GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
+        rotateAnchor = transform.parent;
+    }
+
+    private void Start()
+    {
+        LoadData(gunData);
     }
 
     private void Update()
     {
         circleCollider.radius = aimRadius;
         timer_Shoot.time = shootCooldown;
+        animator.SetFloat("speed", 1f / shootCooldown * 3);
+        animator.SetBool("shooting", target != null && IsInShootFOV(target));
 
         Aim();
 
@@ -58,56 +70,23 @@ public class Gun : MonoBehaviour
     {
         if (!target) return;
 
-        if (aim) transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.AngleAxis(Vector2.SignedAngle(Vector3.up, target.position - transform.position), Vector3.forward), rotationSpeed * Time.deltaTime);
+        if (aim) Rotate();
 
         timer_Shoot.playing = IsInShootFOV(target);
     }
 
-    private void Shoot()
+    protected abstract void Rotate();
+
+    private void Shoot() 
     {
-        switch (shootMode) 
-        {
-            case "Physical Bullets":
-                ShotBullet();
-                break;
-            case "Hitscan Shots":
-                ShotHitscan();
-                break;
-            case "None":
-                break;
-        }
+        animator.Play("Shoot", 0, 0);
     }
 
-    private void ShotBullet() 
-    {
-        GameObject bullet = bulletPool.GetChild(0).gameObject;
-        Rigidbody2D bulletRB = bullet.GetComponent<Rigidbody2D>();
-        HealthImpacter2D bulletHI = bullet.GetComponent<HealthImpacter2D>();
-
-        bullet.SetActive(true);
-        bullet.transform.SetParent(activeBulletPool);
-        bullet.transform.position = gunPoint.position;
-        bulletRB.AddForce(gunPoint.up * bulletSpeed, ForceMode2D.Impulse);
-        bulletHI.delta = -bulletDamage;
-        bulletHI.dontHits.Add(circleCollider);
-        bulletHI.onDisable.AddListener(() =>
-        {
-            bullet.transform.SetParent(bulletPool);
-            bullet.transform.position = bulletPool.position;
-            bulletRB.velocity = Vector2.zero;
-            bulletHI.dontHits.Remove(circleCollider);
-            bulletHI.onDisable.RemoveAllListeners();
-        });
-    }
-
-    private void ShotHitscan() 
-    {
-
-    }
+    public abstract void Fire();
 
     private bool IsInShootFOV(Transform t) 
     {
-        return Vector2.Angle(gunPoint.up, t.position - transform.position) <= shootingFOV;
+        return t.gameObject.activeSelf && Vector2.Angle(gunPoint.up, t.position - transform.position) <= shootingFOV && (t.position - transform.position).sqrMagnitude <= aimRadius * aimRadius;
     }
 
     private void UpdateTarget() 
@@ -128,23 +107,21 @@ public class Gun : MonoBehaviour
         };
     }
 
-    public void Replace(GunData data) 
+    private void LoadData(GunData data) 
     {
         aimRadius = data.aimRadius;
-        aimingMode = data.aimingMode;
-        shootMode = data.shootMode;
-
+        
         shootCooldown = data.shootCooldown;
         bulletDamage = data.bulletDamage;
         bulletSpeed = data.bulletSpeed;
-
+        
+        aim = data.aim;
+        if (!aim) rotateAnchor.rotation = Quaternion.identity;
         rotationSpeed = data.rotationSpeed;
         shootingFOV = data.shootingFOV;
-
-        gunSprite.sprite = data.body.GetComponent<SpriteRenderer>().sprite;
-        gunPoint.localPosition = data.body.transform.GetChild(0).localPosition;
-
-        timer_Shoot.Reset();
+        
+        gunSprite.sprite = data.gunSprite;
+        gunPoint.localPosition = data.gunPointLocalPosition;
     }
 
     private Transform FindClosestTarget() 
@@ -188,5 +165,10 @@ public class Gun : MonoBehaviour
             possibleTargets.Remove(collision.transform);
             UpdateTarget();
         }
+    }
+
+    private void OnEnable()
+    {
+        timer_Shoot.Reset();
     }
 }

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fc745378e7d72f4088ccba679040fea, type: 3}
+  m_Name: DrWeb2Gun
+  m_EditorClassIdentifier: 
+  name: DrWeb2
+  aimRadius: 7
+  shootCooldown: 0.8
+  bulletDamage: 80
+  bulletSpeed: 10
+  aim: 1
+  rotationSpeed: 0.1
+  shootingFOV: 10
+  gunSprite: {fileID: 398241055, guid: e2ddd2642a68c9940a085dbad32343ec, type: 3}
+  shopSprite: {fileID: 398241055, guid: e2ddd2642a68c9940a085dbad32343ec, type: 3}
+  gunPointLocalPosition: {x: 0, y: 1, z: 0}
+  menuOptions:
+  - {fileID: 11400000, guid: da93d36ff7bf48246bf9a77e9d3dd2cf, type: 2}
+  shopCost: 75
+  totalCost: 125

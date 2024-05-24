@@ -8,8 +8,6 @@ public class RMButtonAnimations : MonoBehaviour
 {
     public Image tintImage;
 
-    private float activationComplition = 0;
-
     private int animationID_scale;
 
     public void OnCancel()

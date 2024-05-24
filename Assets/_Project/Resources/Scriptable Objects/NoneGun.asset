@@ -12,12 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fc745378e7d72f4088ccba679040fea, type: 3}
   m_Name: NoneGun
   m_EditorClassIdentifier: 
+  name: None
   aimRadius: 0
-  aimingMode: Closest
-  shootMode: Physical Bullets
-  shootCooldown: 1
-  bulletDamage: 20
-  bulletSpeed: 10
-  rotationSpeed: 5
-  shootingFOV: 20
-  body: {fileID: 5210332801085003659, guid: 938910ae8fe121044a2f0ab32b1cff19, type: 3}
+  shootCooldown: 0
+  bulletDamage: 0
+  bulletSpeed: 0
+  aim: 1
+  rotationSpeed: 0
+  shootingFOV: 0
+  gunSprite: {fileID: 0}
+  shopSprite: {fileID: 731769789, guid: a0732b4490904604d80f45695ba10713, type: 3}
+  gunPointLocalPosition: {x: 0, y: 0, z: 0}
+  menuOptions:
+  - {fileID: 11400000, guid: 0c4739c34dcb4c64d8918d1a82d5667b, type: 2}
+  - {fileID: 11400000, guid: fce427b0e48797f4e8c6672166e73e20, type: 2}
+  - {fileID: 11400000, guid: ec5d87121ad93384d8889dd36b9cac43, type: 2}
+  - {fileID: 11400000, guid: eeee223ff9fbfc24abebfd221b25273f, type: 2}
+  - {fileID: 11400000, guid: 4764472b3dcf99d42af10dc9b5f3b511, type: 2}

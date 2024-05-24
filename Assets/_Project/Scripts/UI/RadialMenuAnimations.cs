@@ -5,6 +5,8 @@ using UnityEngine.UI;
 public class RadialMenuAnimations : MonoBehaviour 
 {
     [SerializeField] private Image halo;
+    [SerializeField] private CanvasGroup optionsGroup;
+    [SerializeField] private CanvasGroup canvasGroup;
 
     [Space]
 
@@ -12,7 +14,6 @@ public class RadialMenuAnimations : MonoBehaviour
     [SerializeField] private float time = 1f;
 
     private RadialMenu menu;
-    private CanvasGroup canvasGroup;
 
     [Space]
 
@@ -29,7 +30,6 @@ public class RadialMenuAnimations : MonoBehaviour
 
     private void Awake()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
         menu = GetComponent<RadialMenu>();
     }
 
@@ -52,18 +52,17 @@ public class RadialMenuAnimations : MonoBehaviour
         LeanTween.value(gameObject, (float value) => { menu.actualRadius = value; }, menu.actualRadius, menu.radius, time * (1 - (canvasGroup.alpha / 1f))).setEase(animationCurve)
             .setOnComplete(() => 
             {
-                canvasGroup.blocksRaycasts = true;
+                
             }
             );
 
         hidden = false;
+        optionsGroup.blocksRaycasts = true;
     }
 
     private void Hide()
     {
         LeanTween.cancel(gameObject);
-
-        canvasGroup.blocksRaycasts = false;
 
         LeanTween.value(gameObject, (float value) => { canvasGroup.alpha = value; }, canvasGroup.alpha, 0f, time * (canvasGroup.alpha / 1f)).setEase(animationCurve);
         LeanTween.value(gameObject, (Vector3 value) => { halo.transform.localScale = value; }, halo.transform.localScale, Vector3.zero, time * (canvasGroup.alpha / 1f)).setEase(animationCurve);
@@ -77,5 +76,6 @@ public class RadialMenuAnimations : MonoBehaviour
             );
 
         hidden = true;
+        optionsGroup.blocksRaycasts = false;
     }
 }

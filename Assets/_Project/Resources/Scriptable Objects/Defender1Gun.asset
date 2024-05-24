@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fc745378e7d72f4088ccba679040fea, type: 3}
+  m_Name: Defender1Gun
+  m_EditorClassIdentifier: 
+  name: Defender1
+  aimRadius: 5
+  shootCooldown: 2
+  bulletDamage: 130
+  bulletSpeed: 1
+  aim: 0
+  rotationSpeed: 0
+  shootingFOV: 180
+  gunSprite: {fileID: -1326974374, guid: 1530a3268384441478afb641b2dfe218, type: 3}
+  shopSprite: {fileID: -1326974374, guid: 1530a3268384441478afb641b2dfe218, type: 3}
+  gunPointLocalPosition: {x: 0, y: 0, z: 0}
+  menuOptions:
+  - {fileID: 11400000, guid: e405586d0d072ca41a5a7af79d9dc724, type: 2}
+  - {fileID: 11400000, guid: da93d36ff7bf48246bf9a77e9d3dd2cf, type: 2}
+  shopCost: 65
+  totalCost: 65

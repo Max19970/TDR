@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fc745378e7d72f4088ccba679040fea, type: 3}
+  m_Name: Avast2Gun
+  m_EditorClassIdentifier: 
+  name: Avast2
+  aimRadius: 15
+  shootCooldown: 0.5
+  bulletDamage: 20
+  bulletSpeed: 0
+  aim: 1
+  rotationSpeed: 0.01
+  shootingFOV: 10
+  gunSprite: {fileID: -232604614, guid: 84a62002e97df8f48af3b3f823f6c404, type: 3}
+  shopSprite: {fileID: -232604614, guid: 84a62002e97df8f48af3b3f823f6c404, type: 3}
+  gunPointLocalPosition: {x: 0.13, y: 1, z: 0}
+  menuOptions:
+  - {fileID: 11400000, guid: da93d36ff7bf48246bf9a77e9d3dd2cf, type: 2}
+  shopCost: 75
+  totalCost: 115

@@ -68,25 +68,28 @@ public class Timer
     public bool playing;
     public float currentTime { get; private set; }
 
-    public Timer(bool playing = true)
+    public Timer(bool playing = true, float currentTime = 0)
     {
         this.time = 1f;
         this.onTime = () => { };
         this.playing = playing;
+        this.currentTime = currentTime;
     }
 
-    public Timer(float time, bool playing = true)
+    public Timer(float time, bool playing = true, float currentTime = 0)
     {
         this.time = time;
         this.onTime = () => { };
         this.playing = playing;
+        this.currentTime = currentTime;
     }
 
-    public Timer(float time, Action onTime, bool playing = true)
+    public Timer(float time, Action onTime, bool playing = true, float currentTime = 0)
     {
         this.time = time;
         this.onTime = onTime;
         this.playing = playing;
+        this.currentTime = currentTime;
     }
 
     public void Update() 

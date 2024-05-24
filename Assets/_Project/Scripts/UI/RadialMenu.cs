@@ -21,6 +21,8 @@ public class RadialMenu : MonoBehaviour
     [Range(0, 1)]
     public float complition;
 
+    public List<Transform> activeChildren;
+
     private void Awake()
     {
         actualRadius = radius;
@@ -28,22 +30,31 @@ public class RadialMenu : MonoBehaviour
 
     private void Update()
     {
+        UpdateActiveChildren();
         AlignChildren();
-        
+    }
+
+    private void UpdateActiveChildren() 
+    {
+        activeChildren.Clear();
+        foreach (Transform child in optionsGroup) 
+        {
+            if (child.gameObject.activeSelf) activeChildren.Add(child);
+        }
     }
 
     private void AlignChildren() 
     {
-        if (optionsGroup.childCount <= 0) return;
+        if (activeChildren.Count <= 0) return;
 
-        float step = (360f / optionsGroup.childCount) * complition;
+        float step = (360f / activeChildren.Count) * complition;
 
-        for (int i = 0; i < optionsGroup.childCount; i++) 
+        for (int i = 0; i < activeChildren.Count; i++) 
         {
-            Vector3 point = (optionsGroup.position + new Vector3(0, actualRadius, 0)) - optionsGroup.position;
+            Vector3 point = new Vector3(0, actualRadius, 0);
             point = Quaternion.AngleAxis(-step * i, optionsGroup.forward) * point;
 
-            optionsGroup.GetChild(i).position = point + optionsGroup.position;
+            activeChildren[i].position = point + optionsGroup.position;
         }
     }
 }

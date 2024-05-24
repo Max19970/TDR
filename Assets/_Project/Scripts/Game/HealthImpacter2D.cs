@@ -45,6 +45,7 @@ public class HealthImpacter2D : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log(other.gameObject.layer);
         if (!working) return;
 
         if (dontHits.Contains(other)) return;
@@ -59,10 +60,12 @@ public class HealthImpacter2D : MonoBehaviour
         }
 
         if (temporary) StartCoroutine(Helpers.SetActive(gameObject, false, lifetimeAfterHit, () => { onDisable.Invoke(); }));
+        working = false;
     }
 
     private void OnEnable()
     {
+        working = true;
         timer_maxLife.Reset();
     }
 }

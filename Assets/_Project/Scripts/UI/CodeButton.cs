@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class CodeButton : Selectable, ISubmitHandler, ICancelHandler, IPointerClickHandler
 {
+    [Header("Functionality")]
+    public UnityEvent onClick;
+    [Header("Animation")]
     public UnityEvent<BaseEventData> onSelect;
     public UnityEvent<BaseEventData> onDeselect;
     public UnityEvent<BaseEventData> onSubmit;
@@ -43,6 +46,7 @@ public class CodeButton : Selectable, ISubmitHandler, ICancelHandler, IPointerCl
     {
         Debug.Log("I'm submited", gameObject);
         onSubmit.Invoke(eventData);
+        onClick.Invoke();
     }
 
     public void OnCancel(BaseEventData eventData = null)
